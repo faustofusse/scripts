@@ -11,6 +11,7 @@
 
 FILE* fzf_pipe;
 char* base = "/Users/faustofusse/Documents";
+char c;
 
 void find_repos (const char * dir_name) {
     DIR* d = opendir (dir_name);
@@ -44,7 +45,9 @@ void find_repos (const char * dir_name) {
 }
 
 int main(int argc, char *argv[]) {
-    fzf_pipe = popen("fzf", "r+"); // --reverse
+    if (argc > 1) base = argv[1];
+    fzf_pipe = popen("fzf --reverse", "r+");
     find_repos(base);
+    while ((c = fgetc(fzf_pipe)) != EOF) printf("%c", c);
     return pclose(fzf_pipe);
 }
